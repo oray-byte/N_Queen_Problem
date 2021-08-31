@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include <string>
 
 using std::vector;
@@ -14,6 +15,7 @@ using std::cout;
 using std::endl;
 using std::getline;
 using std::cin;
+using std::set;
 
 class Queen
 {
@@ -25,7 +27,8 @@ public:
 private:
 	void initBoard();
 	void printBoard();
-	bool solve(int column);
+	bool solve(int n);
+	bool isProblem(int m, int n);
 	vector<vector<string>> board;
 	int boardSize;
 };

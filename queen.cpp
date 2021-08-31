@@ -16,11 +16,49 @@ Queen::Queen(int size)
 
 void Queen::solve()
 {
-	printBoard();
+	
+	if (solve(0))
+	{
+		printBoard();
+		cout << "True" << endl;
+	}
+	else
+	{
+		cout << "False" << endl;
+	}
 }
 
-bool Queen::solve(int column)
+bool Queen::solve(int n)
 {
+	/*
+	* First, put a Q in (0, 0)
+	*   Check for conflicts
+	* If no, put a Q in (0, 1)
+	*   Check for conflicts
+	* Yes, so put a Q in (1, 1)
+	*   Check for conlicts
+	* Yes, so put a Q in (2, 1)
+	*   Check for conflicts
+	* No, so put a Q in (0, 2)
+	*/
+	if (n >= boardSize)
+	{
+		return true;
+	}
+
+	for (int i = 0; i < boardSize; i++)
+	{
+		if (!isProblem(i, n))
+		{
+			board.at(i).at(n) == "Q";
+
+			if (solve(n + 1))
+			{
+				return true;
+			}
+			board.at(i).at(n) == " ";
+		}
+	}
 	return false;
 }
 
@@ -70,4 +108,45 @@ void Queen::printBoard()
 		}
 		cout << "|" << endl;
 	}
+	cout << endl;
+}
+
+bool Queen::isProblem(int m, int n)
+{
+	int columnUpperDiagnol = m - 1;
+	int columnLowerDiagnol = m + 1;
+	/*
+	* If there is a problem, this function will return true
+	* Otherwise, return false
+	*/
+	for (int i = (n - 1); i >= 0; i--)
+	{
+		if (board.at(m).at(i) == "Q")
+		{
+			return true;
+		}
+	}
+
+	for (int i = (n - 1); i >= 0; i--)
+	{
+		if (columnUpperDiagnol >= 0)
+		{
+			if (board.at(columnUpperDiagnol).at(i) == "Q")
+			{
+				return true;
+			}
+			columnUpperDiagnol--;
+		}
+
+		if (columnLowerDiagnol < boardSize)
+		{
+			if (board.at(columnLowerDiagnol).at(i) == "Q")
+			{
+				return true;
+			}
+			columnLowerDiagnol++;
+		}
+	}
+
+	return false;
 }
