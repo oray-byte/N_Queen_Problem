@@ -4,62 +4,65 @@
 #include "queen.h"
 Queen::Queen()
 {
-	this->setBoardSize(4);
-	this->initBoard();
-}
+	int size = 0;
+	do
+	{
+		cout << "Enter desired size: ";
+		cin >> size;
+		cin.clear();
+		cin.ignore();
+	} while (size < 4);
 
-Queen::Queen(int size)
-{
 	this->setBoardSize(size);
 	this->initBoard();
 }
 
 void Queen::solve()
 {
-	
+	// Just encapsulating the function.
 	if (solve(0))
 	{
 		printBoard();
-		cout << "True" << endl;
 	}
 	else
 	{
-		cout << "False" << endl;
+		cout << "Does not exist..." << endl;
 	}
 }
 
 bool Queen::solve(int n)
 {
 	/*
-	* First, put a Q in (0, 0)
-	*   Check for conflicts
-	* If no, put a Q in (0, 1)
-	*   Check for conflicts
-	* Yes, so put a Q in (1, 1)
-	*   Check for conlicts
-	* Yes, so put a Q in (2, 1)
-	*   Check for conflicts
-	* No, so put a Q in (0, 2)
+	* This is the recursive function that solves the problem.
+	* First, we check if n is >= boardSize. If it is, we have found a solution. 
+	* Second, we have the for loop. It's job is to go through each possible location in each column (each row) and check if it works. (See isProblem() for critria)
+	* Next, we check if there is a problem at the current location (i, n) in the matrix n x n
+	* If there is no position that works, we return false.
+	* If there is not a problem, we place a 'Q' at that position since it is valid.
+	* Then, we call the function within the if statement. When it returns true, we have found a solution.
+	* The recursion works by finding a location that works in the current column then calls the function for the next column. If there is not a valid position, return false and find another row position for the current column.
+	*   However, if n is ever >= boardSize then we found a solution since there is only (boardSize - 1) columns.
 	*/
-	if (n >= boardSize)
+	
+	if (n >= boardSize) // If this statement is true, then that means the last n was the final column and satisfied the conditions, meaning a solution was found.
 	{
-		return true;
+		return true; // Base condition
 	}
 
 	for (int i = 0; i < boardSize; i++)
 	{
-		if (!isProblem(i, n))
+		if (!isProblem(i, n)) // If not a problem, continue with recursion
 		{
-			board.at(i).at(n) == "Q";
+			board.at(i).at(n) = "Q"; // Sets a Q on board
 
-			if (solve(n + 1))
+			if (solve(n + 1)) 
 			{
 				return true;
 			}
-			board.at(i).at(n) == " ";
+			board.at(i).at(n) = " "; // Allows for back-tracking incase there is no solution with current board and all possible rows in n + 1 column
 		}
 	}
-	return false;
+	return false; // Only occurs when there is no possible combination with current board and 
 }
 
 void Queen::initBoard()
@@ -113,20 +116,44 @@ void Queen::printBoard()
 
 bool Queen::isProblem(int m, int n)
 {
-	int columnUpperDiagnol = m - 1;
-	int columnLowerDiagnol = m + 1;
 	/*
-	* If there is a problem, this function will return true
-	* Otherwise, return false
+	* Checks to see if desired position (m, n) in matrix is valid. If it is invalid, we return true.
+	* First, we acknowledge that we do not have to check positions in front of us because we are placing Q's left to right so there are no Q's on the right to check. This cuts out half of the searching.
+	* I declared columUpperDiagonal and columnLowerDiagonal to simplify searching diagonally. More on that later.
+	* We begin by checking to the right of the desired location. If there was member function for vectors like myVector.count('Q'), then I would just call that but there is not unfortunately.
+	* Next, we check the upper and lower diagonals from the desired location. columnUpperDiagonal and columnLowerDiagonal are initialized with an offset of one from the desired location's height in the matrix.
+	*   This is because we are only checking to the left of the desired so if we just decrement i down from the desired position, we will check both diagonals.
+	*   Additionally, we need to check if columnUpperDiagonal and columnLowerDiagonal are within bounds of the board so we do not cause a seg fault
 	*/
+	int columnUpperDiagonal = m - 1;
+	int columnLowerDiagonal = m + 1;
+
 	for (int i = (n - 1); i >= 0; i--)
 	{
 		if (board.at(m).at(i) == "Q")
 		{
 			return true;
 		}
-	}
 
+		if (columnUpperDiagonal >= 0)
+		{
+			if (board.at(columnUpperDiagonal).at(i) == "Q")
+			{
+				return true;
+			}
+			columnUpperDiagonal--;
+		}
+
+		if (columnLowerDiagonal < boardSize)
+		{
+			if (board.at(columnLowerDiagonal).at(i) == "Q")
+			{
+				return true;
+			}
+			columnLowerDiagonal++;
+		}
+	}
+	/*
 	for (int i = (n - 1); i >= 0; i--)
 	{
 		if (columnUpperDiagnol >= 0)
@@ -147,6 +174,6 @@ bool Queen::isProblem(int m, int n)
 			columnLowerDiagnol++;
 		}
 	}
-
+	*/
 	return false;
 }

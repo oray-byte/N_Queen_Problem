@@ -1,4 +1,2 @@
 ﻿  queen.cpp
-C:\Programming\C++\N_Queen_Problem\queen.cpp(53,22): warning C4834: discarding return value of function with 'nodiscard' attribute
-C:\Programming\C++\N_Queen_Problem\queen.cpp(59,22): warning C4834: discarding return value of function with 'nodiscard' attribute
   Queen_Problem.vcxproj -> C:\Programming\C++\N_Queen_Problem\x64\Debug\Queen_Problem.exe

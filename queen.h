@@ -21,7 +21,6 @@ class Queen
 {
 public:
 	Queen();
-	Queen(int size);
 	void solve();
 	void setBoardSize(int size);
 private:
