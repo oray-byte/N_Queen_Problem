@@ -1,0 +1,8 @@
+# Things to ignore
+*.exe
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+**/.vs
+**/Debug
