@@ -1,2 +1,0 @@
-C:\Programming\C++\Queen_Problem\Debug\Queen_Problem.exe
-C:\Programming\C++\Queen_Problem\Debug\Queen_Problem.pdb
